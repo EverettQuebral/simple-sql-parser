@@ -6,7 +6,7 @@
 		"parser"
 	],
 	"license":		"MIT",
-	"version":		"0.0.3",
+	"version":		"0.0.4",
 	"author":		"dsferruzza",
 	"contributors": [
 		{
@@ -23,9 +23,6 @@
 		"url":"https://github.com/RienNeVaPlus/sqlParser.js"
 	},
 	"main": 		"sqlParser.js",
-	"scripts": {
-		"start": "node ./sqlParser.js"
-	},
 	"engines": {
 		"node": ">=0.10.5"
 	},

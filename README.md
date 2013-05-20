@@ -22,14 +22,19 @@ var sqlParser = require('simple-sql-parser');
 Parse a query:
 
 ```js
-var statement = 'your SQL query';
+var statement = 'SELECT * FROM table WHERE field = value';
 var result = sqlParser(statement);
 console.log(result);
 ```
 
-## Example
-
-See `example.html` (open brower's console).
+## Result
+```js
+{
+	SELECT: [ '*' ],
+	FROM: [ 'table' ],
+	WHERE: { operator: '=', left: 'field', right: 'value' }
+}
+```
 
 ## Notes
 
