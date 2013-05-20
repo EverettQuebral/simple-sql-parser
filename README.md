@@ -16,7 +16,7 @@ npm install simple-sql-parser
 Require the parser:
 
 ```js
-var sqlParser = require('sqlParser');
+var sqlParser = require('simple-sql-parser');
 ```
 
 Parse a query:
