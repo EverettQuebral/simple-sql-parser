@@ -6,7 +6,7 @@ function trim(str) {
 
 // Split a string using a separator, only if this separator isn't beetween brackets
 function protect_split(separator, str) {
-	var sep = '######';
+	var sep = separator || '######';
 	
 	var string = false;
 	var nb_brackets = 0;
@@ -64,7 +64,7 @@ function parseSQL(query) {
 	parts_name = parts_name.concat(parts_name.map(function (item) {
 		return item.toLowerCase();
 	}));
-	var parts_order = new Array();
+	var parts_order = [];
 	
 	// Hide words defined as separator but written inside brackets in the query
 	query = query.replace(/\((.+?)\)|"(.+?)"|'(.+?)'|`(.+?)`/gi, function (match) {
@@ -117,7 +117,7 @@ function parseSQL(query) {
 	});
 	
 	// Define analysis functions
-	var analysis = new Array();
+	var analysis = [];
 	
 	analysis['SELECT'] = analysis['SET'] = function (str) {
 		var result = protect_split(',', str);
@@ -140,7 +140,7 @@ function parseSQL(query) {
 	
 	analysis['LEFT JOIN'] = analysis['JOIN'] = analysis['INNER JOIN'] = function (str) {
 		str = str.split(' ON ');
-		var result = new Object();
+		var result = {};
 		result['table'] = trim(str[0]);
 		result['cond'] = trim(str[1]);				
 		return result;
@@ -152,12 +152,12 @@ function parseSQL(query) {
 	
 	analysis['ORDER BY'] = function (str) {
 		str = str.split(',');
-		var result = new Array();
+		var result = [];
 		str.forEach(function (item, key) {
 			var order_by = /([A-Za-z0-9_\.]+)\s+(ASC|DESC){1}/gi;
 			order_by = order_by.exec(item);
 			if (order_by != null) {
-				var tmp = new Object();
+				var tmp = {};
 				tmp['column'] = trim(order_by[1]);
 				tmp['order'] = trim(order_by[2]);
 				result.push(tmp);
@@ -170,7 +170,7 @@ function parseSQL(query) {
 		var limit = /((\d+)\s*,\s*)?(\d+)/gi;
 		limit = limit.exec(str);
 		if (typeof limit[2] == 'undefined') limit[2] = 1;
-		var result = new Object();
+		var result = {};
 		result['nb'] = parseInt(trim(limit[3]));
 		result['from'] = parseInt(trim(limit[2]));
 		return result;
@@ -179,7 +179,7 @@ function parseSQL(query) {
 	analysis['INSERT INTO'] = function (str) {
 		var insert = /([A-Za-z0-9_\.]+)\s*(\(([A-Za-z0-9_\., ]+)\))?/gi;
 		insert = insert.exec(str);
-		var result = new Object();
+		var result = {};
 		result['table'] = trim(insert[1]);
 		if (typeof insert[3] != 'undefined') {
 			result['columns'] = insert[3].split(',');
@@ -192,9 +192,9 @@ function parseSQL(query) {
 	
 	analysis['VALUES'] = function (str) {
 		var groups = protect_split(',', str);
-		var result = new Array();
+		var result = {};
 		groups.forEach(function(group) {
-			var group = group.replace(/^\(/g,'').replace(/\)$/g,'');
+			group = group.replace(/^\(/g,'').replace(/\)$/g,'');
 			group = protect_split(',', group);
 			result.push(group);
 		});
@@ -204,7 +204,7 @@ function parseSQL(query) {
 	// TODO: handle GROUP BY and HAVING
 	
 	// Analyze parts
-	var result = new Object();
+	var result = {};
 	var j = 0;
 	parts_order.forEach(function (item, key) {
 		item = item.toUpperCase();
@@ -215,7 +215,7 @@ function parseSQL(query) {
 			if (typeof result[item] != 'undefined') {
 				if (typeof result[item] == 'string' || typeof result[item][0] == 'undefined') {
 					var tmp = result[item];
-					result[item] = new Array();
+					result[item] = [];
 					result[item].push(tmp);
 				}
 				
@@ -368,7 +368,7 @@ CondLexer.prototype = {
 		}
 		
 		return {type: 'operator', value: tokenValue};
-	},
+	}
 };
 
 // Tokenise a string (only useful for debug)
@@ -467,10 +467,12 @@ CondParser.prototype = {
 		}
 
 		return astNode;
-	},
+	}
 };
 
 // Parse a string
 CondParser.parse = function (source) {
 	return new CondParser(source).parseExpressionsRecursively();
-}
+};
+
+module.exports = parseSQL;

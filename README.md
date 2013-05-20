@@ -1,21 +1,30 @@
 sqlParser.js
 ============
 
-Javascript library to parse CRUD (Create Retrieve Update Delete) SQL queries.
+Node.js Javascript library to parse CRUD (Create Retrieve Update Delete) SQL queries.
+
+Note: this is a Fork of https://github.com/dsferruzza/sqlParser.js
+
+## How to install
+
+```
+npm install simple-sql-parser
+```
 
 ## How to use
 
-Import the JS file in your page:
+Require the parser:
 
-```html
-<script src="sqlParser.js"></script>
+```js
+var sqlParser = require('sqlParser');
 ```
 
 Parse a query:
 
 ```js
-var output = parseSQL('your SQL query');
-console.log(output);
+var statement = 'your SQL query';
+var result = sqlParser(statement);
+console.log(result);
 ```
 
 ## Example
