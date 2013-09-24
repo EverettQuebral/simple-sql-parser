@@ -192,7 +192,7 @@ function parseSQL(query) {
 	
 	analysis['VALUES'] = function (str) {
 		var groups = protect_split(',', str);
-		var result = {};
+		var result = [];
 		groups.forEach(function(group) {
 			group = group.replace(/^\(/g,'').replace(/\)$/g,'');
 			group = protect_split(',', group);
