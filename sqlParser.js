@@ -191,14 +191,37 @@ function parseSQL(query) {
 	};
 	
 	analysis['VALUES'] = function (str) {
-		var groups = protect_split(',', str);
-		var result = [];
-		groups.forEach(function(group) {
-			group = group.replace(/^\(/g,'').replace(/\)$/g,'');
-			group = protect_split(',', group);
-			result.push(group);
-		});
-		return result;
+		// string could be ("x1", "x2"), ("y1", "y2"), ("z1", "z2")
+		// extract the values inside the parenthesis
+		var regExp = /\(([^)]+)\)/g;
+		var groups = str.match(regExp);			// returns an Array [(x1, x2), (y1, y2), (z1, z2)]
+
+		if (groups instanceof Array){
+			// iterate to the values, remove parenthesis then push value in the group
+			var results = [];
+			groups.forEach(function(group){
+				// replace parenthesis
+				var result = [];
+				group = group.replace(/[()]/g,"");
+				group = protect_split(",", group);
+				group.forEach(function(g){
+					result.push(g);
+				});
+				results.push(result);
+			});
+			return results;
+		}
+		else {
+			var groups = protect_split(',', str);
+			//var result = {};
+			var result = [];
+			groups.forEach(function(group) {
+				group = group.replace(/^\(/g,'').replace(/\)$/g,'');
+				group = protect_split(',', group);
+				result.push(group);
+			});
+			return result;
+		}
 	};
 
 	// TODO: handle GROUP BY and HAVING
