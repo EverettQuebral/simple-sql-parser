@@ -213,11 +213,8 @@ function parseSQL(query) {
 		}
 		else {
 			var groups = protect_split(',', str);
-			//var result = {};
 			var result = [];
 			groups.forEach(function(group) {
-				group = group.replace(/^\(/g,'').replace(/\)$/g,'');
-				group = protect_split(',', group);
 				result.push(group);
 			});
 			return result;
