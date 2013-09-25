@@ -1,4 +1,5 @@
-{<img src="https://travis-ci.org/EverettQuebral/simple-sql-parser.png" />}[https://travis-ci.org/EverettQuebral/simple-sql-parser]
+<img src="https://travis-ci.org/EverettQuebral/simple-sql-parser.png" />
+https://travis-ci.org/EverettQuebral/simple-sql-parser
 
 sqlParser.js
 ============
