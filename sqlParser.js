@@ -119,11 +119,37 @@ function parseSQL(query) {
 	// Define analysis functions
 	var analysis = [];
 	
-	analysis['SELECT'] = analysis['SET'] = function (str) {
+	analysis['SELECT'] = function (str) {
 		var result = protect_split(',', str);
 		result.forEach(function(item, key) {
 			if (item == '') result.splice(key);
 		});
+		return result;
+	};
+
+	analysis['SET'] = function (str) {
+		var result = []
+			, tempResult
+			, tempString = str
+			, i = 0
+			, j = 0
+			, matches = str.match(/'{([^']*)}'/g);
+
+		// check if str has a valid JSON and it should be enclosed in '', so a JSON should start in '{ and ends with }'\
+		if (matches){
+			matches.forEach(function(match){
+				tempString = tempString.replace(match, "$" + i + "$");
+			});
+			tempResult = protect_split(',', tempString);
+
+			// then replace with the real value
+			for ( j = 0; j < tempResult.length; j++ ){
+				result.push(tempResult[j].replace("$" + j + "$", matches[j]));
+			}
+		}
+		else {
+			result = protect_split(',', str);
+		}
 		return result;
 	};
 	
@@ -213,11 +239,8 @@ function parseSQL(query) {
 		}
 		else {
 			var groups = protect_split(',', str);
-			//var result = {};
 			var result = [];
-			groups.forEach(function(group) {
-				group = group.replace(/^\(/g,'').replace(/\)$/g,'');
-				group = protect_split(',', group);
+			groups.forEach(function(group) {	
 				result.push(group);
 			});
 			return result;
