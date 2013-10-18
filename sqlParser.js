@@ -240,7 +240,7 @@ function parseSQL(query) {
 		else {
 			var groups = protect_split(',', str);
 			var result = [];
-			groups.forEach(function(group) {	
+			groups.forEach(function(group) {
 				result.push(group);
 			});
 			return result;
